@@ -1,0 +1,168 @@
+<div class="container" >
+  <h5>Crud de Medicamento</h5>
+  <div class="col-md-23" style="margin-top: 3%">
+      <div class="row" style="height:80px">
+          <div class="col-md-4">
+              <input [(ngModel)] = "filtro"  class="form-control"  id="id_txt_filtro" name="filtro" placeholder="Ingrese el nombre" type="text" maxlength="30" />
+          </div>
+          <div class="col-md-2">
+              <button (click)="consultar(filtro)"  type="button" class="btn btn-primary" id="id_btn_filtrar" style="width: 150px">Filtrar</button>
+          </div>
+          <div class="col-md-2">
+              <button  type="button" data-toggle='modal' data-target="#idModalRegistrar" class='btn btn-success' style="width: 150px">Registrar</button>
+          </div>
+      </div>
+      <div class="row">
+         <div class="col_md-12">
+             <div class="content">
+              <table id="id_table" class="table table-striped table-bordered">
+                  <thead>
+                      <tr>
+                          <th style="width: 5%">Id</th>
+                          <th style="width: 30%">Nombre</th>
+                          <th style="width: 10%">Precio</th>
+                          <th style="width: 10%">Stock</th>
+                          <th style="width: 10%">Laboratorio</th>
+                          <th style="width: 7%"></th>
+                          <th style="width: 7%"></th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let aux of medicamentos">
+                          <td>{{aux.idMedicamento}}</td>
+                          <td>{{aux.nombre}}</td>
+                          <td>{{aux.precio}}</td>
+                          <td>{{aux.stock}}</td>
+                          <td>{{aux.laboratorio}}</td> 
+                          <td><button (click)="busca(aux)" type="button" style="width: 90px" class="btn btn-primary btn-sm"  data-toggle="modal" data-target="#idModalActualizar">Editar</button></td>
+                          <td><button (click)="Eliminar(aux.idMedicamento!)"type="button" style="width: 90px" class="btn btn-primary btn-sm" >Eliminar</button></td>      
+                      </tr>
+                  </tbody>
+              </table>
+             </div>
+         </div>
+      </div>
+  </div>
+
+  <div class="modal fade"  id="idModalRegistrar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="max-width: 70%;">
+          <div class="modal-content" >
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Registro de Cliente</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+
+              <div class="modal-body">
+                  <form  [formGroup]="forms" class="content" >
+                      <div class="submit-form">
+                           <div class="row">
+
+                              <div class="col-lg-5">
+                                  <label for="id_reg_nombre">Nombres</label>
+                                  <input  [(ngModel)]="medicamento.nombre" type="text" placeholder="Ingrese Nombre" formControlName="nombre" class="form-control" name="nombre" id="id_reg_nombre" />
+                                  <div *ngIf="submitted && forms.controls.nombre.errors" class="invalid">
+                                          <div *ngIf="forms.controls.nombre.errors.required">
+                                               El nombre es obligatorio
+                                          </div>    
+                                          <div *ngIf="forms.controls.nombre.errors.pattern">
+                                               El nombre es de 3 a 30 caracteres
+                                          </div>
+                                  </div>      
+                              </div>
+                              
+                              <div class="col-lg-5">
+                                  <label for="id_reg_precio">Precio de Medicamento</label>
+                                  <input  [(ngModel)]="medicamento.precio" type="text"  placeholder="Ingrese precio" formControlName="precio" class="form-control" name="precio" id="id_reg_precio" />
+                                  <div *ngIf="submitted && forms.controls.precio.errors" class="invalid">
+                                      <div *ngIf="forms.controls.precio.errors.required">
+                                           El precio es obligatorio
+                                      </div>    
+                                  </div>
+                              </div>
+
+                              <div class="col-lg-5">
+                                  <label for="id_reg_stock">Stock de Medicamento</label>
+                                  <input  [(ngModel)]="medicamento.stock"  type="text"  placeholder="Ingrese stock" formControlName="stock" class="form-control" name="stock" id="id_reg_stock" />
+                                  <div *ngIf="submitted && forms.controls.stock.errors" class="invalid">
+                                      <div *ngIf="forms.controls.stock.errors.required">
+                                           El stock  es obligatorio
+                                      </div>    
+                                  </div>
+                              </div>
+                             
+                              <div class="col-lg-5">
+                                  <label for="id_reg_direccion">Laboratorio</label>
+                                  <input  [(ngModel)]="medicamento.laboratorio" t type="text"  placeholder="Ingrese nombre de laboratorio" formControlName="laboratorio" class="form-control" name="laboratorio" id="id_reg_laboratorio" />
+                                  <div *ngIf="submitted && forms.controls.laboratorio.errors" class="invalid">
+                                      <div *ngIf="forms.controls.laboratorio.errors.required">
+                                           El nombre de laboratorio es obligatorio
+                                      </div>    
+                                      <div *ngIf="forms.controls.laboratorio.errors.pattern">
+                                           El nombre de laboratorio es de 3 a 30 caracteres
+                                      </div>
+                                  </div>
+                              </div>
+                           </div>     
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn_reg_cerrar" style="width: 100px;">Close</button>
+                          <div class="form-group text-center">
+                              <div class="col-lg-12">
+                                  <button (click)="registra()" id="id_reg_registra"  class="btn btn-success form-control"style="width: 100px;">Registrar</button>
+                              </div>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="modal fade" id="idModalActualizar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="max-width: 80%;">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Actualización de Medicamento</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                   </button>
+              </div>
+              <div class="modal-body">
+                  <form class="content" >
+                      <div  class="row">
+                          <div class="col-lg-4">
+                              <label for="id_act_nombre">Nombres</label>
+                              <input [(ngModel)]="medicamento.nombre" type="text" placeholder="Ingrese Nombre" class="form-control" name="nombres" id="id_act_nombre" />
+                          </div>
+
+                          <div class="col-lg-4">
+                              <label for="id_act_precio">Precio del Medicamento</label>
+                              <input [(ngModel)]="medicamento.precio" type="text" placeholder="Ingrese precio" class="form-control" name="precio" id="id_act_precio"  />
+                          </div>
+
+                          <div class="col-lg-4">
+                              <label for="id_act_stock">Stock de Medicamento</label>
+                              <input [(ngModel)]="medicamento.stock" type="text" placeholder="Ingrese stock" class="form-control" name="stock" id="id_act_stock"  />
+                          </div>
+                          <div class="col-lg-4">
+                              <label for="id_act_laboratorio">Laboratorio</label>
+                              <input [(ngModel)]="medicamento.laboratorio" type="text" placeholder="Ingrese laboratorio" class="form-control" name="laboratorio" id="id_act_laboratorio"  />
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn_act_cerrar">Close</button>
+                          <div class="form-group text-center">
+                              <div class="col-lg-12">
+                                  <button (click)="actualiza()" id="id_act_actualiza" class="btn btn-success form-control">Actualizar</button>
+                              </div>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+
+</div>
